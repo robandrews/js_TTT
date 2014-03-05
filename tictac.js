@@ -17,39 +17,17 @@ var Game = function () {
   c.lineWidth = 10;
   c.strokeStyle = 'black';
   c.stroke();
-  
-  canvas.addEventListener('mousemove', function(e) {
-    var mousePos = getMousePos(canvas, e);
-    var message = 'Mouse position: ' + mousePos.x + ',' + mousePos.y;
-    writeMessage(canvas, message);
-  }, false);
-  
-  
-  function writeMessage(canvas, message) {
-    var context = canvas.getContext('2d');
-    context.clearRect(0, 600, 600, 640);
-    context.font = '12pt Calibri';
-    context.fillStyle = 'black';
-    context.fillText(message, 425, 620);
-  }
 
-  function getMousePos(canvas, e) {
-    var rect = canvas.getBoundingClientRect();
-    return {
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top
-    };
-  }
 }
   
 Game.prototype.run = function () {
   var board = this.board;
   this.currentPlayer = 1;
-
+  takeMove();
+  
   function playerTurn(player) { 
     showBoard(board);
-    // var input = prompt("Place mark: e.g. 2,1 :  \n" );
-    var move = input.split(",");
+    var move = 
     var xcord = parseInt(move[1]);
     var ycord = parseInt(move[0]);
       
@@ -110,6 +88,51 @@ Game.prototype.run = function () {
         ctx.fillText(mark, 25 + (i * 200), 175 + (j * 200) );
       }
     }
+  }
+  
+  function takeMove(){
+    var canvas = document.getElementById('canvas'); 
+    var c = canvas.getContext('2d'); 
+    
+    canvas.addEventListener('mousemove', function(e) {
+      var mousePos = getMousePos(canvas, e);
+      var message = 'Mouse position: ' + mousePos.x + ',' + mousePos.y;
+      writeMessage(canvas, message);
+    }, false);
+  
+  
+    function writeMessage(canvas, message) {
+      var context = canvas.getContext('2d');
+      context.clearRect(0, 600, 600, 640);
+      context.font = '12pt Calibri';
+      context.fillStyle = 'black';
+      context.fillText(message, 425, 620);
+    }
+
+    function getMousePos(canvas, e) {
+      var rect = canvas.getBoundingClientRect();
+      return {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top
+      };  
+    }
+    
+    canvas.addEventListener("click", function (e) {
+      var mousePos = getMousePos(canvas, e);
+      var coords = [mousePos.x, mousePos.y];
+      var arr = []
+      for(var i = 0; i < 2; i++){
+        if (coords[i] < 200){
+          arr[i] = 0;
+        }else if(coords[i] > 400){
+          arr[i] = 2;
+        }else{
+          arr[i] = 1;
+        }
+      }
+      console.log(arr);
+    }
+     ,false )    
   }
     
   playerTurn(this.currentPlayer);
