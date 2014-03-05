@@ -25,33 +25,33 @@ Game.prototype.run = function () {
   this.currentPlayer = 1;
   takeMove();
   
-  function playerTurn(player) { 
+  function playerTurn(move) { 
     showBoard(board);
-    var move = 
     var xcord = parseInt(move[1]);
     var ycord = parseInt(move[0]);
       
-    if(player === 1){
+    if(this.currentPlayer === 1){
       if(board[xcord][ycord] == " "){
         board[xcord][ycord] = "X";
+        showBoard(board);
       }else{
-        playerTurn(player);
+        playerTurn(this.currentPlayer);
       };
     }else{
       if(board[xcord][ycord] == " "){
         board[xcord][ycord] = "O";
+        showBoard(board);
       }else{
-        playerTurn(player);
+        playerTurn(this.currentPlayer);
       };
     };
       
     if (won(board)) {
       showBoard(board);
-      alert("You win!");
+      alert("Winner!");
       return;
     } else {
-      (player === 1) ? this.currentPlayer = 0 : this.currentPlayer = 1;
-      playerTurn(this.currentPlayer);
+      (this.currentPlayer === 1) ? this.currentPlayer = 0 : this.currentPlayer = 1;
     }
   };
 
@@ -97,11 +97,11 @@ Game.prototype.run = function () {
     canvas.addEventListener('mousemove', function(e) {
       var mousePos = getMousePos(canvas, e);
       var message = 'Mouse position: ' + mousePos.x + ',' + mousePos.y;
-      writeMessage(canvas, message);
+      writeCoords(canvas, message);
     }, false);
   
   
-    function writeMessage(canvas, message) {
+    function writeCoords(canvas, message) {
       var context = canvas.getContext('2d');
       context.clearRect(0, 600, 600, 640);
       context.font = '12pt Calibri';
@@ -130,12 +130,11 @@ Game.prototype.run = function () {
           arr[i] = 1;
         }
       }
-      console.log(arr);
+      playerTurn(arr);
     }
      ,false )    
   }
-    
-  playerTurn(this.currentPlayer);
+      
 };
 
 Array.prototype.transpose = function() {
