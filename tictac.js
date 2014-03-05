@@ -1,30 +1,32 @@
 var Game = function () {
-    
   this.board = [ [" "," "," "], [" "," "," "], [" "," "," "] ];
   this.currentPlayer = 1
-  
-  var canvas = document.getElementById('canvas'); 
-  var c = canvas.getContext('2d'); 
-
-  c.moveTo(200,0);
-  c.lineTo(200,600);
-  c.moveTo(400,0);
-  c.lineTo(400,600);
-  c.moveTo(0,200);
-  c.lineTo(600,200);
-  c.moveTo(0,400);
-  c.lineTo(600,400);
-  c.lineWidth = 10;
-  c.strokeStyle = 'black';
-  c.stroke();
-
 }
   
 Game.prototype.run = function () {
   var board = this.board;
   this.currentPlayer = 1;
-  takeMove();
+  setUpMouseListeners();
+  initBoard();
   
+  function initBoard(){
+    this.board = [ [" "," "," "], [" "," "," "], [" "," "," "] ];
+    
+    var canvas = document.getElementById('canvas'); 
+    var c = canvas.getContext('2d'); 
+    
+    c.moveTo(200,0);
+    c.lineTo(200,600);
+    c.moveTo(400,0);
+    c.lineTo(400,600);
+    c.moveTo(0,200);
+    c.lineTo(600,200);
+    c.moveTo(0,400);
+    c.lineTo(600,400);
+    c.lineWidth = 10;
+    c.strokeStyle = 'black';
+    c.stroke();
+  }
   function playerTurn(move) { 
     showBoard(board);
     var xcord = parseInt(move[1]);
@@ -50,13 +52,31 @@ Game.prototype.run = function () {
       showBoard(board);
       alert("Winner!");
       return;
-    } else {
+    } else if (tied(board)){
+      var ans = confirm("We have a tie. Press okay to play again");
+      if(ans == true){
+        location.reload();
+      }
+    }
+    else {
       (this.currentPlayer === 1) ? this.currentPlayer = 0 : this.currentPlayer = 1;
     }
   };
 
+  function tied(board){
+    var tied = true
+    for (var i = 0; i < 3; i++){
+      for(var j = 0; j < 3; j++){
+        if(board[i][j] === " "){
+          tied = false;
+        }
+      }
+    }
+    return tied;
+  }
+  
   function won(board){
-    var rboard = board.slice()
+    var rboard = board.slice();
     rboard = rboard.transpose();
     var diag1 = [board[0][0], board[1][1], board[2][2]];
     var diag2 = [board[2][0], board[1][1], board[0][2]];
@@ -90,7 +110,7 @@ Game.prototype.run = function () {
     }
   }
   
-  function takeMove(){
+  function setUpMouseListeners(){
     var canvas = document.getElementById('canvas'); 
     var c = canvas.getContext('2d'); 
     
