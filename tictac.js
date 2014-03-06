@@ -51,9 +51,9 @@ Game.prototype.run = function () {
     if (won(board)) {
       showBoard(board);
       alert("Winner!");
-      return;
+      location.reload();
     } else if (tied(board)){
-      var ans = confirm("We have a tie. Press okay to play again");
+      var ans = confirm("We have a tie. Press OK to play again");
       if(ans == true){
         location.reload();
       }
